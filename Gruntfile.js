@@ -6,17 +6,17 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
+ 'use strict';
 
-module.exports = function(grunt) {
+ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
     jshint: {
       all: [
-        'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>',
+      'Gruntfile.js',
+      'tasks/*.js',
+      '<%= nodeunit.tests %>',
       ],
       options: {
         jshintrc: '.jshintrc',
@@ -31,7 +31,10 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     deploy: {
       liveservers: {
-        
+        servers: require('servers').servers(),
+        cmds_before_deploy: ["ls",'ls -al'],
+        cmds_after_deploy: ["ls",'ls -al'],
+        deploy_path: '~/grunt-plugins/grddunt-deploy'
       }
       /*default_options: {
         options: {
@@ -68,9 +71,9 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'deploy', /*'nodeunit'*/]);
+  //grunt.registerTask('test', ['clean', 'deploy', 'nodeunit']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
-
+  //grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['deploy']);
 };
