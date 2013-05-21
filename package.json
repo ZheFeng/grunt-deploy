@@ -1,0 +1,42 @@
+{
+  "name": "grunt-deploy",
+  "description": "The Grunt plugin to deploy nodejs app into ubuntu",
+  "version": "0.1.0",
+  "homepage": "http://zhefeng.github.io/grunt-deploy/",
+  "author": {
+    "name": "Zhe Feng",
+    "email": "fengzhe1983@gmai.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ZheFeng/grunt-deploy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ZheFeng/grunt-deploy/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://zhefeng.github.io/grunt-deploy//blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.1.2",
+    "grunt": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
