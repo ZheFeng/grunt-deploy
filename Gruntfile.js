@@ -30,7 +30,10 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     deploy: {
-      default_options: {
+      liveservers: {
+        
+      }
+      /*default_options: {
         options: {
         },
         files: {
@@ -45,7 +48,7 @@ module.exports = function(grunt) {
         files: {
           'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
         },
-      },
+      },*/
     },
 
     // Unit tests.
@@ -65,7 +68,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'deploy', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'deploy', /*'nodeunit'*/]);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
