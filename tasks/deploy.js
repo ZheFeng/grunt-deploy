@@ -53,8 +53,10 @@
       }
 
       execCmds(self.data.cmds_before_deploy, 0, function(){
-        var createFolder = 'cd ' + self.data.deploy_path + ' && cd releases && mkdir ' + timeStamp;
-        exec(createFolder,function(){
+        var createFolder = 'cd ' + self.data.deploy_path + '/releases && mkdir ' + timeStamp;
+        var removeCurrent = 'rm -rf ' + self.data.deploy_path + '/current';
+        var setCurrent = 'ln -s ' + self.data.deploy_path + '/releases/' + timeStamp + ' ' + self.data.deploy_path + '/current';
+        exec(createFolder + ' && ' + removeCurrent + ' && ' + setCurrent,function(){
 
           var sys = require('sys')
           var execLocal = require('child_process').exec;
