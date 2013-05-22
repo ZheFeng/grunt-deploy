@@ -32,9 +32,9 @@
     deploy: {
       liveservers: {
         servers: require('servers').servers(),
-        cmds_before_deploy: ["ls",'ls -al'],
-        cmds_after_deploy: ["ls",'ls -al'],
-        deploy_path: '~/grunt-plugins/grddunt-deploy'
+        cmds_before_deploy: [],
+        cmds_after_deploy: [],
+        deploy_path: '~/grunt-plugins/grunt-deploy'
       }
       /*default_options: {
         options: {

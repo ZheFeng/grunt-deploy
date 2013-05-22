@@ -34,50 +34,48 @@
           if (err) {throw err;}
           stream.on('data', function(data, extended) {
             console.log(data + '');
-            next && next(data, extended);
+          });
+          stream.on('close', function() {
+            next && next();
           });
         });
       };
 
       var execCmds = function(cmds, index, next){
-        exec(cmds[index++], function(){
-          if(index < cmds.length){
+        if(!cmds ||  cmds.length <= index) {
+          next && next();
+        }
+        else{
+          exec(cmds[index++], function(){
             execCmds(cmds,index,next);
-          }
-          else {
-            next();
-          }
-        })
+          })
+        }
       }
 
       execCmds(self.data.cmds_before_deploy, 0, function(){
-        exec('[ -d ' + self.data.deploy_path + ' ] && echo "exits"',function(data, extended){
-          if(data === 'exits'){
-            console.log(data);
-          }
-          else{
-            console.warn('The deploy_path is not exist.')
-          }
+        var createFolder = 'cd ' + self.data.deploy_path + ' && cd releases && mkdir ' + timeStamp;
+        exec(createFolder,function(){
           connection.end();
         })
-
-
-
-
-        //execCmds(self.data.cmds_after_deploy, 0, function(){
-          //
-        //})
       })
     }
 
-
+    var length = self.data.servers.length;
+    var completed = 0;
+    var checkCompleted = function(){
+      completed++;
+      if(completed>=length){
+        done();
+      }
+    }
 
     self.data.servers.forEach(function(server){
       var c = new Connection();
       c.on('connect', function() {
-        console.log('Connected to server: ' + server.host);
+        console.log('Connecting to server: ' + server.host);
       });
       c.on('ready', function() {
+        console.log('Connected to server: ' + server.host);
         execSingleServer(server,c);
       });
       c.on('error', function(err) {
@@ -86,7 +84,8 @@
         if (err) {throw err;}
       });
       c.on('close', function(had_error) {
-        console.log("Closed connection for server: " + server.host)
+        console.log("Closed connection for server: " + server.host);
+        checkCompleted();
       });
       c.connect(server);
     })
