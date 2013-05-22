@@ -1,4 +1,4 @@
-# grunt-deploy
+# grunt-deploy (Still in development, not ready to use)
 
 > The Grunt plugin to deploy nodejs app into ubuntu
 
