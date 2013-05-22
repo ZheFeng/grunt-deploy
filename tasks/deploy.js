@@ -55,7 +55,17 @@
       execCmds(self.data.cmds_before_deploy, 0, function(){
         var createFolder = 'cd ' + self.data.deploy_path + ' && cd releases && mkdir ' + timeStamp;
         exec(createFolder,function(){
-          connection.end();
+
+          var sys = require('sys')
+          var execLocal = require('child_process').exec;
+          var child;
+
+          child = execLocal("scp -r . " + server.username + "@" + server.host + ":" + self.data.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
+
+            execCmds(self.data.cmds_before_deploy, 0, function(){
+              connection.end();
+            });
+          });
         })
       })
     }
