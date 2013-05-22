@@ -31,10 +31,12 @@
     // Configuration to be run (and then tested).
     deploy: {
       liveservers: {
-        servers: require('servers').servers(),
-        cmds_before_deploy: [],
-        cmds_after_deploy: [],
-        deploy_path: '~/grunt-plugins/grunt-deploy'
+        options:{
+          servers: require('servers').servers(),
+          cmds_before_deploy: [],
+          cmds_after_deploy: [],
+          deploy_path: '~/grunt-plugins/grunt-deploy'
+        }
       }
       /*default_options: {
         options: {

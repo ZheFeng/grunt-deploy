@@ -53,13 +53,13 @@
       }
 
       console.log('executing cmds before deploy');
-      execCmds(self.data.cmds_before_deploy, 0, function(){
+      execCmds(options.cmds_before_deploy, 0, function(){
         console.log('cmds before deploy executed');
 
 
-        var createFolder = 'cd ' + self.data.deploy_path + '/releases && mkdir ' + timeStamp;
-        var removeCurrent = 'rm -rf ' + self.data.deploy_path + '/current';
-        var setCurrent = 'ln -s ' + self.data.deploy_path + '/releases/' + timeStamp + ' ' + self.data.deploy_path + '/current';
+        var createFolder = 'cd ' + options.deploy_path + '/releases && mkdir ' + timeStamp;
+        var removeCurrent = 'rm -rf ' + options.deploy_path + '/current';
+        var setCurrent = 'ln -s ' + options.deploy_path + '/releases/' + timeStamp + ' ' + options.deploy_path + '/current';
         
         console.log('start deploy');
         exec(createFolder + ' && ' + removeCurrent + ' && ' + setCurrent,function(){
@@ -68,11 +68,11 @@
           var execLocal = require('child_process').exec;
           var child;
 
-          child = execLocal("scp -r . " + server.username + "@" + server.host + ":" + self.data.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
+          child = execLocal("scp -r . " + server.username + "@" + server.host + ":" + options.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
             console.log('end deploy');
 
             console.log('executing cmds after deploy');
-            execCmds(self.data.cmds_after_deploy, 0, function(){
+            execCmds(options.cmds_after_deploy, 0, function(){
               console.log('cmds after deploy executed');
               connection.end();
             });
@@ -81,7 +81,7 @@
       })
     }
 
-    var length = self.data.servers.length;
+    var length = options.servers.length;
     var completed = 0;
     var checkCompleted = function(){
       completed++;
@@ -90,7 +90,7 @@
       }
     }
 
-    self.data.servers.forEach(function(server){
+    options.servers.forEach(function(server){
       var c = new Connection();
       c.on('connect', function() {
         console.log('Connecting to server: ' + server.host);
