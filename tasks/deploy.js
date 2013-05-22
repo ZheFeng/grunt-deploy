@@ -29,12 +29,12 @@
     var execSingleServer = function(server, connection){
 
       var exec = function(cmd, next){
-        console.log(server.username + "@" + server.host + ":~$ " + cmd);
+        //console.log(server.username + "@" + server.host + ":~$ " + cmd);
         connection.exec(cmd, function(err, stream) {
           if (err) {throw err;}
-          stream.on('data', function(data, extended) {
-            console.log(data + '');
-          });
+          //stream.on('data', function(data, extended) {
+            //console.log(data + '');
+          //});
           stream.on('close', function() {
             next && next();
           });
@@ -52,10 +52,16 @@
         }
       }
 
+      console.log('executing cmds before deploy');
       execCmds(self.data.cmds_before_deploy, 0, function(){
+        console.log('cmds before deploy executed');
+
+
         var createFolder = 'cd ' + self.data.deploy_path + '/releases && mkdir ' + timeStamp;
         var removeCurrent = 'rm -rf ' + self.data.deploy_path + '/current';
         var setCurrent = 'ln -s ' + self.data.deploy_path + '/releases/' + timeStamp + ' ' + self.data.deploy_path + '/current';
+        
+        console.log('start deploy');
         exec(createFolder + ' && ' + removeCurrent + ' && ' + setCurrent,function(){
 
           var sys = require('sys')
@@ -63,8 +69,11 @@
           var child;
 
           child = execLocal("scp -r . " + server.username + "@" + server.host + ":" + self.data.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
+            console.log('end deploy');
 
-            execCmds(self.data.cmds_before_deploy, 0, function(){
+            console.log('executing cmds after deploy');
+            execCmds(self.data.cmds_after_deploy, 0, function(){
+              console.log('cmds after deploy executed');
               connection.end();
             });
           });
