@@ -1,7 +1,7 @@
 {
   "name": "grunt-deploy",
   "description": "The Grunt plugin to deploy nodejs app into ubuntu",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "homepage": "http://zhefeng.github.io/grunt-deploy/",
   "author": {
     "name": "Zhe Feng",
