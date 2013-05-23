@@ -33,9 +33,9 @@
         //console.log(server.username + "@" + server.host + ":~$ " + cmd);
         connection.exec(cmd, function(err, stream) {
           if (err) {throw err;}
-          //stream.on('data', function(data, extended) {
-            //console.log(data + '');
-          //});
+          stream.on('data', function(data, extended) {
+            showLog && console.log(data + '');
+          });
           stream.on('close', function() {
             next && next();
           });
