@@ -36,7 +36,7 @@
           stream.on('data', function(data, extended) {
             showLog && console.log(data + '');
           });
-          stream.on('close', function() {
+          stream.on('end', function() {
             next && next();
           });
         });
