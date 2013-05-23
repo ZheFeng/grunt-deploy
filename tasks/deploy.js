@@ -28,7 +28,8 @@
 
     var execSingleServer = function(server, connection){
 
-      var exec = function(cmd, next){
+      var exec = function(cmd, showLog, next){
+
         //console.log(server.username + "@" + server.host + ":~$ " + cmd);
         connection.exec(cmd, function(err, stream) {
           if (err) {throw err;}
@@ -41,19 +42,19 @@
         });
       };
 
-      var execCmds = function(cmds, index, next){
+      var execCmds = function(cmds, index, showLog, next){
         if(!cmds ||  cmds.length <= index) {
           next && next();
         }
         else{
-          exec(cmds[index++], function(){
+          exec(cmds[index++], showLog, function(){
             execCmds(cmds,index,next);
           })
         }
       }
 
       console.log('executing cmds before deploy');
-      execCmds(options.cmds_before_deploy, 0, function(){
+      execCmds(options.cmds_before_deploy, 0, true, function(){
         console.log('cmds before deploy executed');
 
 
@@ -62,7 +63,7 @@
         var setCurrent = 'ln -s ' + options.deploy_path + '/releases/' + timeStamp + ' ' + options.deploy_path + '/current';
         
         console.log('start deploy');
-        exec(createFolder + ' && ' + removeCurrent + ' && ' + setCurrent,function(){
+        exec(createFolder + ' && ' + removeCurrent + ' && ' + setCurrent, false,function(){
 
           var sys = require('sys')
           var execLocal = require('child_process').exec;
@@ -72,7 +73,7 @@
             console.log('end deploy');
 
             console.log('executing cmds after deploy');
-            execCmds(options.cmds_after_deploy, 0, function(){
+            execCmds(options.cmds_after_deploy, 0, true, function(){
               console.log('cmds after deploy executed');
               connection.end();
             });
