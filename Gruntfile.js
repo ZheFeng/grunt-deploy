@@ -35,7 +35,8 @@
           servers: require('servers').servers(),
           cmds_before_deploy: [],
           cmds_after_deploy: [],
-          deploy_path: '~/grunt-plugins/grunt-deploy'
+          source_path: '.',
+					deploy_path: '~/grunt-plugins/grunt-deploy'
         }
       }
       /*default_options: {
