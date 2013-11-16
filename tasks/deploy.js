@@ -30,7 +30,10 @@
 
       var exec = function(cmd, showLog, next){
 
-        //console.log(server.username + "@" + server.host + ":~$ " + cmd);
+        cmd = cmd.replace('$LOCAL_PATH', options.local_path);
+        cmd = cmd.replace('$DEPLOY_PATH', options.deploy_path);
+        cmd = cmd.replace('$RELEASE_PATH', options.releasePath);
+
         connection.exec(cmd, function(err, stream) {
           if (err) {throw err;}
           stream.on('data', function(data, extended) {
@@ -48,7 +51,7 @@
         }
         else{
           exec(cmds[index++], showLog, function(){
-            execCmds(cmds,index,next);
+            execCmds(cmds,index,showLog,next);
           })
         }
       }
@@ -57,25 +60,27 @@
       execCmds(options.cmds_before_deploy, 0, true, function(){
         console.log('cmds before deploy executed');
 
-
         var createFolder = 'cd ' + options.deploy_path + '/releases && mkdir ' + timeStamp;
+        options.releasePath = options.deploy_path + '/releases/' + timeStamp;
         var removeCurrent = 'rm -rf ' + options.deploy_path + '/current';
         var setCurrent = 'ln -s ' + options.deploy_path + '/releases/' + timeStamp + ' ' + options.deploy_path + '/current';
         
         console.log('start deploy');
-        exec(createFolder + ' && ' + removeCurrent + ' && ' + setCurrent, false,function(){
+        exec(createFolder, true, function(){
 
           var sys = require('sys')
           var execLocal = require('child_process').exec;
           var child;
+          var localPath = options.local_path || '.';
 
-          child = execLocal("scp -r . " + server.username + "@" + server.host + ":" + options.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
+          child = execLocal("scp -r " + localPath + " " + server.username + "@" + server.host + ":" + options.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
             console.log('end deploy');
-
-            console.log('executing cmds after deploy');
-            execCmds(options.cmds_after_deploy, 0, true, function(){
-              console.log('cmds after deploy executed');
-              connection.end();
+            exec(removeCurrent + ' && ' + setCurrent, true, function () {
+              console.log('executing cmds after deploy');
+              execCmds(options.cmds_after_deploy, 0, true, function(){
+                console.log('cmds after deploy executed');
+                connection.end();
+              });
             });
           });
         })
