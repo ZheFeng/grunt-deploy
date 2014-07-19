@@ -69,7 +69,7 @@
           var execLocal = require('child_process').exec;
           var child;
 
-          child = execLocal("scp -r . " + server.username + "@" + server.host + ":" + options.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
+          child = execLocal("scp -r " + (options.source_path || ".") + " " + server.username + "@" + server.host + ":" + options.deploy_path + "/releases/" + timeStamp, function (error, stdout, stderr) {
             console.log('end deploy');
 
             console.log('executing cmds after deploy');
